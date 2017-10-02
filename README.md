@@ -8,12 +8,12 @@ npm install formik-persist --save
 
 # Basic Usage
 
-Just import the `FormikPersist` component and put it inside any Formik form. It renders `null`!
+Just import the `<Persist >` component and put it inside any Formik form. It renders `null`!
 
 ```js
 import React from 'react'
 import { Formik, Field, Form } from 'formik'
-import { FormikPersist } from 'formik-persist'
+import { Persist } from 'formik-persist'
 
 export const Signup = () =>
   <div>
@@ -27,7 +27,7 @@ export const Signup = () =>
           <Field name="lastName" placeholder="Last Name" />
           <Field name="email" type="email" placeholder="Email Address" />
           <button type="submit">Submit</button>
-          <FormikPersist name="signup-form" />
+          <Persist name="signup-form" />
         </Form>}
     />
   </div>;

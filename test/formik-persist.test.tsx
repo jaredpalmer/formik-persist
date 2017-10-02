@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 
-import { FormikPersist } from '../src/formik-persist';
+import { Persist } from '../src/formik-persist';
 import { Formik, Field, FormikProps, Form } from 'formik';
 import { mount, shallow } from 'enzyme';
 
@@ -20,7 +20,7 @@ const InnerForm: React.SFC<any> = ({ handleChange, handleBlur, values }) =>
       value={values.name}
     />
     <button type="submit">Submit</button>
-    <FormikPersist name="signup" debounce={0} />
+    <Persist name="signup" debounce={0} />
   </Form>;
 
 describe('Formik Persist', () => {

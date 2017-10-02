@@ -4,12 +4,12 @@ import * as PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
 
-export interface FormikPersistProps {
+export interface PersistProps {
   name: string;
   debounce?: number;
 }
 
-export class FormikPersist extends React.Component<FormikPersistProps, {}> {
+export class Persist extends React.Component<PersistProps, {}> {
   static defaultProps = {
     debounce: 300,
   };
@@ -18,8 +18,12 @@ export class FormikPersist extends React.Component<FormikPersistProps, {}> {
     formik: PropTypes.object,
   };
 
+  saveForm = debounce((data: FormikProps<{}>) => {
+    window.localStorage.setItem(this.props.name, JSON.stringify(data));
+  }, this.props.debounce);
+
   componentWillReceiveProps(
-    _nextProps: FormikPersistProps,
+    _nextProps: PersistProps,
     nextContext: { formik: FormikProps<{}> }
   ) {
     if (!isEqual(nextContext.formik, this.context.formik)) {
@@ -57,10 +61,6 @@ export class FormikPersist extends React.Component<FormikPersistProps, {}> {
       }
     }
   }
-
-  saveForm = debounce((data: FormikProps<{}>) => {
-    window.localStorage.setItem(this.props.name, JSON.stringify(data));
-  }, this.props.debounce);
 
   render() {
     return null;

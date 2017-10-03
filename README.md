@@ -1,6 +1,6 @@
 # Formik Persist
 
-Persist and rehydrate a Formik form.
+Persist and rehydrate a [Formik](https://github.com/jaredpalmer/formik) form.
 
 ```
 npm install formik-persist --save

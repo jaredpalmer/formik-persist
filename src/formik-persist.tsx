@@ -4,14 +4,18 @@ import * as PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
 
+import { Storage, LocalStorage } from './Storages';
+
 export interface PersistProps {
   name: string;
   debounce?: number;
+  storage?: Storage;
 }
 
 export class Persist extends React.Component<PersistProps, {}> {
   static defaultProps = {
     debounce: 300,
+    storage: new LocalStorage(),
   };
 
   static contextTypes = {
@@ -19,7 +23,10 @@ export class Persist extends React.Component<PersistProps, {}> {
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
-    window.localStorage.setItem(this.props.name, JSON.stringify(data));
+    (this.props.storage as Storage).setItem(
+      this.props.name,
+      JSON.stringify(data)
+    );
   }, this.props.debounce);
 
   componentWillReceiveProps(
@@ -31,8 +38,10 @@ export class Persist extends React.Component<PersistProps, {}> {
     }
   }
 
-  componentDidMount() {
-    const maybeState = window.localStorage.getItem(this.props.name);
+  async componentDidMount() {
+    const maybeState = await (this.props.storage as Storage).getItem(
+      this.props.name
+    );
     if (maybeState && maybeState !== null) {
       const { values, errors, touched, isSubmitting, status } = JSON.parse(
         maybeState

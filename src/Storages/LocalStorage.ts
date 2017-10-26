@@ -1,6 +1,6 @@
-import Storage from './Storage';
+import { Storage } from './Storage';
 
-export default class LocalStorage implements Storage {
+export class LocalStorage implements Storage {
   getItem(key: string) {
     return new Promise<string | null>(res => {
       res(window.localStorage.getItem(key));

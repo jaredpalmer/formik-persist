@@ -38,37 +38,38 @@ export class Persist extends React.Component<PersistProps, {}> {
     }
   }
 
-  async componentDidMount() {
-    const maybeState = await (this.props.storage as Storage).getItem(
-      this.props.name
-    );
-    if (maybeState && maybeState !== null) {
-      const { values, errors, touched, isSubmitting, status } = JSON.parse(
-        maybeState
-      );
+  componentDidMount() {
+    (this.props.storage as Storage)
+      .getItem(this.props.name)
+      .then(maybeState => {
+        if (maybeState && maybeState !== null) {
+          const { values, errors, touched, isSubmitting, status } = JSON.parse(
+            maybeState
+          );
 
-      const { formik } = this.context;
+          const { formik } = this.context;
 
-      if (values) {
-        formik.setValues(values);
-      }
+          if (values) {
+            formik.setValues(values);
+          }
 
-      if (errors) {
-        formik.setErrors(errors);
-      }
+          if (errors) {
+            formik.setErrors(errors);
+          }
 
-      if (touched) {
-        formik.setTouched(touched);
-      }
+          if (touched) {
+            formik.setTouched(touched);
+          }
 
-      if (isSubmitting) {
-        formik.setSubmitting(isSubmitting);
-      }
+          if (isSubmitting) {
+            formik.setSubmitting(isSubmitting);
+          }
 
-      if (status) {
-        formik.setStatus(status);
-      }
-    }
+          if (status) {
+            formik.setStatus(status);
+          }
+        }
+      });
   }
 
   render() {

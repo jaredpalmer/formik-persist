@@ -1,5 +1,7 @@
 # Formik Persist
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jaredpalmer/formik-persist.svg)](https://greenkeeper.io/)
+
 Persist and rehydrate a [Formik](https://github.com/jaredpalmer/formik) form.
 
 ```

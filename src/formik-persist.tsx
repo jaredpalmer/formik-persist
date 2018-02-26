@@ -2,10 +2,12 @@ import * as React from 'react';
 import { FormikProps } from 'formik';
 import * as PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import omit from 'lodash.omit';
 import isEqual from 'lodash.isequal';
 
 export interface PersistProps {
   name: string;
+  ignoreFields?: string[];
   debounce?: number;
 }
 
@@ -19,8 +21,17 @@ export class Persist extends React.Component<PersistProps, {}> {
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
-    window.localStorage.setItem(this.props.name, JSON.stringify(data));
+    const dataToSave = this.omitIgnoredFields(data);
+    window.localStorage.setItem(this.props.name, JSON.stringify(dataToSave));
   }, this.props.debounce);
+
+  omitIgnoredFields = (data: FormikProps<{}>) => {
+    const { ignoreFields } = this.props;
+    const { values } = data;
+    return ignoreFields
+      ? { ...data, values: omit(values, ignoreFields) }
+      : data;
+  };
 
   componentWillReceiveProps(
     _nextProps: PersistProps,

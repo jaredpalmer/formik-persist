@@ -27,9 +27,14 @@ export class Persist extends React.Component<PersistProps, {}> {
 
   omitIgnoredFields = (data: FormikProps<{}>) => {
     const { ignoreFields } = this.props;
-    const { values } = data;
+    const { values, touched, errors } = data;
     return ignoreFields
-      ? { ...data, values: omit(values, ignoreFields) }
+      ? {
+          ...data,
+          values: omit(values, ignoreFields),
+          touched: omit(touched, ignoreFields),
+          errors: omit(errors, ignoreFields),
+        }
       : data;
   };
 

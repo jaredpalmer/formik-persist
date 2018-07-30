@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { FormikProps } from 'formik';
+import { FormikProps, connect } from 'formik';
 import * as PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
-import isEqual from 'lodash.isequal';
+import isEqual from 'react-fast-compare';
 
 export interface PersistProps {
   name: string;
   debounce?: number;
 }
 
-export class Persist extends React.Component<PersistProps, {}> {
+class PersistImpl extends React.Component<
+  PersistProps & { formik: FormikProps<any> },
+  {}
+> {
   static defaultProps = {
     debounce: 300,
   };
@@ -22,43 +25,16 @@ export class Persist extends React.Component<PersistProps, {}> {
     window.localStorage.setItem(this.props.name, JSON.stringify(data));
   }, this.props.debounce);
 
-  componentWillReceiveProps(
-    _nextProps: PersistProps,
-    nextContext: { formik: FormikProps<{}> }
-  ) {
-    if (!isEqual(nextContext.formik, this.context.formik)) {
-      this.saveForm(nextContext.formik);
+  componentDidUpdate(prevProps: PersistProps & { formik: FormikProps<any> }) {
+    if (!isEqual(prevProps.formik, this.context.formik)) {
+      this.saveForm(prevProps.formik);
     }
   }
 
   componentDidMount() {
     const maybeState = window.localStorage.getItem(this.props.name);
     if (maybeState && maybeState !== null) {
-      const { values, errors, touched, isSubmitting, status } = JSON.parse(
-        maybeState
-      );
-
-      const { formik } = this.context;
-
-      if (values) {
-        formik.setValues(values);
-      }
-
-      if (errors) {
-        formik.setErrors(errors);
-      }
-
-      if (touched) {
-        formik.setTouched(touched);
-      }
-
-      if (isSubmitting) {
-        formik.setSubmitting(isSubmitting);
-      }
-
-      if (status) {
-        formik.setStatus(status);
-      }
+      this.props.formik.setFormikState(JSON.parse(maybeState));
     }
   }
 
@@ -66,3 +42,5 @@ export class Persist extends React.Component<PersistProps, {}> {
     return null;
   }
 }
+
+export const Persist = connect<PersistProps, any>(PersistImpl);

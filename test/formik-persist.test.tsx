@@ -1,46 +1,38 @@
 import * as React from 'react';
-import * as renderer from 'react-test-renderer';
-
+import * as ReactDOM from 'react-dom';
 import { Persist } from '../src/formik-persist';
-import { Formik, Field, FormikProps, Form } from 'formik';
-import { mount, shallow } from 'enzyme';
+import { Formik, FormikProps, Form } from 'formik';
 
 // tslint:disable-next-line:no-empty
 const noop = () => {};
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const InnerForm: React.SFC<any> = ({ handleChange, handleBlur, values }) =>
-  <Form>
-    <input
-      name="name"
-      type="text"
-      onChange={handleChange}
-      onBlur={handleBlur}
-      value={values.name}
-    />
-    <button type="submit">Submit</button>
-    <Persist name="signup" debounce={0} />
-  </Form>;
-
 describe('Formik Persist', () => {
+  let node = document.createElement('div');
   it('attempts to rehydrate on mount', () => {
-    let setItem = jest.fn(() => console.log('hello'));
     (window as any).localStorage = {
       getItem: jest.fn(),
-      setItem,
+      setItem: jest.fn(),
       removeItem: jest.fn(),
     };
-    // @todo
-    const tree = mount(
+    let injected: any;
+
+    ReactDOM.render(
       <Formik
         initialValues={{ name: 'jared' }}
         onSubmit={noop}
-        component={InnerForm}
-      />
+        render={(props: FormikProps<{ name: string }>) => {
+          injected = props;
+          return (
+            <div>
+              <Persist name="signup" debounce={0} />
+            </div>
+          );
+        }}
+      />,
+      node
     );
     expect(window.localStorage.getItem).toHaveBeenCalled();
-    tree.find(InnerForm).props().setValues({ name: 'ian' });
-    expect(tree.find(InnerForm).find('input').props().value).toEqual('ian');
+    injected.setValues({ name: 'ian' });
+    expect(injected.values.name).toEqual('ian');
   });
 });

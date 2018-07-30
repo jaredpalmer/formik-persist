@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FormikProps, connect } from 'formik';
-import * as PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import isEqual from 'react-fast-compare';
 
@@ -15,10 +14,6 @@ class PersistImpl extends React.Component<
 > {
   static defaultProps = {
     debounce: 300,
-  };
-
-  static contextTypes = {
-    formik: PropTypes.object,
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {

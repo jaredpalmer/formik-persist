@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { FormikProps, connect } from 'formik';
 import debounce from 'lodash.debounce';
+import omit from 'lodash.omit';
 import isEqual from 'react-fast-compare';
 
 export interface PersistProps {
   name: string;
+  ignoreFields?: string[];
   debounce?: number;
   isSessionStorage?: boolean;
 }
@@ -18,12 +20,29 @@ class PersistImpl extends React.Component<
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
+    const dataToSave = this.omitIgnoredFields(data);
     if (this.props.isSessionStorage) {
-      window.sessionStorage.setItem(this.props.name, JSON.stringify(data));
+      window.sessionStorage.setItem(
+        this.props.name,
+        JSON.stringify(dataToSave)
+      );
     } else {
-      window.localStorage.setItem(this.props.name, JSON.stringify(data));
+      window.localStorage.setItem(this.props.name, JSON.stringify(dataToSave));
     }
   }, this.props.debounce);
+
+  omitIgnoredFields = (data: FormikProps<{}>) => {
+    const { ignoreFields } = this.props;
+    const { values, touched, errors } = data;
+    return ignoreFields
+      ? {
+          ...data,
+          values: omit(values, ignoreFields),
+          touched: omit(touched, ignoreFields),
+          errors: omit(errors, ignoreFields),
+        }
+      : data;
+  };
 
   componentDidUpdate(prevProps: PersistProps & { formik: FormikProps<any> }) {
     if (!isEqual(prevProps.formik, this.props.formik)) {

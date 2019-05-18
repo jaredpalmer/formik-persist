@@ -64,4 +64,35 @@ describe('Formik Persist', () => {
     injected.setValues({ name: 'Anuj' });
     expect(injected.values.name).toEqual('Anuj');
   });
+
+  it('omits ignored fields', () => {
+    let node = document.createElement('div');
+    jest.useFakeTimers();
+    let state = null;
+    let setItem = (key: string, value: any) => (state = value);
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem,
+      removeItem: jest.fn(),
+    };
+    let injected: any;
+    ReactDOM.render(
+      <Formik
+        initialValues={{ name: 'Anuj Sachan' }}
+        onSubmit={noop}
+        render={(props: FormikProps<{ name: string }>) => {
+          injected = props;
+          return (
+            <div>
+              <Persist name="signup" debounce={0} />
+            </div>
+          );
+        }}
+      />,
+      node
+    );
+    injected.setValues({ name: 'ciaran' }, { email: 'ian@example.com' });
+    jest.runAllTimers();
+    expect(JSON.parse(state).values).toEqual({ name: 'ciaran' });
+  });
 });

@@ -24,7 +24,8 @@
     "strictNullChecks": true,
     "stripInternal": true,
     "target": "es5",
-    "typeRoots": ["node_modules/@types"]
+    "types": ["formik", "react"],
+    "typeRoots": ["node_modules"]
   },
   "include": ["src", "./typings.d.ts"],
   "exclude": ["node_modules", "dist"]

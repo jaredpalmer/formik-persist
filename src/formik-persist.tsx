@@ -26,8 +26,8 @@ class PersistImpl extends React.Component<
   }, this.props.debounce);
 
   componentDidUpdate(prevProps: PersistProps & { formik: FormikProps<any> }) {
-    if (!isEqual(prevProps.formik, this.context.formik)) {
-      this.saveForm(prevProps.formik);
+    if (!isEqual(prevProps.formik, this.props.formik)) {
+      this.saveForm(this.props.formik);
     }
   }
 

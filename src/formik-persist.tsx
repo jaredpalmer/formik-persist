@@ -18,10 +18,17 @@ class PersistImpl extends React.Component<
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
+    const { isSubmitting, ...filteredData } = data;
     if (this.props.isSessionStorage) {
-      window.sessionStorage.setItem(this.props.name, JSON.stringify(data));
+      window.sessionStorage.setItem(
+        this.props.name,
+        JSON.stringify(filteredData)
+      );
     } else {
-      window.localStorage.setItem(this.props.name, JSON.stringify(data));
+      window.localStorage.setItem(
+        this.props.name,
+        JSON.stringify(filteredData)
+      );
     }
   }, this.props.debounce);
 

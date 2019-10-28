@@ -31,7 +31,8 @@
     "format": "prettier --trailing-comma es5 --single-quote --write 'src/**/*' 'test/**/*'",
     "precommit": "lint-staged",
     "addc": "all-contributors add",
-    "gen-docs": "all-contributors generate && doctoc README.md"
+    "gen-docs": "all-contributors generate && doctoc README.md",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",

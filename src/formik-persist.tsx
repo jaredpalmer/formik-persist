@@ -7,6 +7,7 @@ export interface PersistProps {
   name: string;
   debounce?: number;
   isSessionStorage?: boolean;
+  preSaveHandler?: () => boolean;
 }
 
 class PersistImpl extends React.Component<
@@ -19,9 +20,13 @@ class PersistImpl extends React.Component<
 
   saveForm = debounce((data: FormikProps<{}>) => {
     if (this.props.isSessionStorage) {
-      window.sessionStorage.setItem(this.props.name, JSON.stringify(data));
+      if (!this.props.preSaveHandler || this.props.preSaveHandler()) {
+        window.sessionStorage.setItem(this.props.name, JSON.stringify(data));
+      }
     } else {
-      window.localStorage.setItem(this.props.name, JSON.stringify(data));
+      if (!this.props.preSaveHandler || this.props.preSaveHandler()) {
+        window.localStorage.setItem(this.props.name, JSON.stringify(data));
+      }
     }
   }, this.props.debounce);
 

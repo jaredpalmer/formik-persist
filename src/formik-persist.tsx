@@ -7,6 +7,7 @@ export interface PersistProps {
   name: string;
   debounce?: number;
   isSessionStorage?: boolean;
+  clearIfSubmitted?: boolean;
 }
 
 class PersistImpl extends React.Component<
@@ -25,6 +26,14 @@ class PersistImpl extends React.Component<
     }
   }, this.props.debounce);
 
+  clearFormState = () => {
+    if (this.props.isSessionStorage) {
+      window.sessionStorage.removeItem(this.props.name);
+    } else {
+      window.localStorage.removeItem(this.props.name);
+    }
+  };
+
   componentDidUpdate(prevProps: PersistProps & { formik: FormikProps<any> }) {
     if (!isEqual(prevProps.formik, this.props.formik)) {
       this.saveForm(this.props.formik);
@@ -37,6 +46,13 @@ class PersistImpl extends React.Component<
       : window.localStorage.getItem(this.props.name);
     if (maybeState && maybeState !== null) {
       this.props.formik.setFormikState(JSON.parse(maybeState));
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.clearIfSubmitted && this.props.formik.isSubmitting) {
+      this.saveForm.cancel();
+      this.clearFormState();
     }
   }
 

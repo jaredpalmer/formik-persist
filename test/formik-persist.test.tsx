@@ -64,4 +64,75 @@ describe('Formik Persist', () => {
     injected.setValues({ name: 'Anuj' });
     expect(injected.values.name).toEqual('Anuj');
   });
+
+  it('it does not attempt to removeItem on unmount', () => {
+    let node = document.createElement('div');
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injected: any;
+
+    ReactDOM.render(
+      <Formik
+        initialValues={{}}
+        onSubmit={noop}
+        render={(props: FormikProps<{}>) => {
+          injected = props;
+          return (
+            <div>
+              <Persist name="signup" debounce={0} />
+            </div>
+          );
+        }}
+      />,
+      node
+    );
+
+    injected.setSubmitting(true);
+    ReactDOM.unmountComponentAtNode(node);
+    expect(window.localStorage.removeItem).not.toHaveBeenCalled();
+  });
+
+  describe('when clearOnSubmit prop is true', () => {
+    let node: HTMLDivElement;
+    let injected: any;
+
+    beforeEach(() => {
+      node = document.createElement('div');
+      (window as any).localStorage = {
+        getItem: jest.fn(),
+        setItem: jest.fn(),
+        removeItem: jest.fn(),
+      };
+
+      ReactDOM.render(
+        <Formik
+          initialValues={{}}
+          onSubmit={noop}
+          render={(props: FormikProps<{}>) => {
+            injected = props;
+            return (
+              <div>
+                <Persist name="signup" debounce={0} clearIfSubmitted />
+              </div>
+            );
+          }}
+        />,
+        node
+      );
+    });
+
+    it('when submitted and then unmounted, it attempts to removeItem', () => {
+      injected.setSubmitting(true);
+      ReactDOM.unmountComponentAtNode(node);
+      expect(window.localStorage.removeItem).toHaveBeenCalled();
+    });
+
+    it('when unmounted without submission, it does not attempt to removeItem', () => {
+      ReactDOM.unmountComponentAtNode(node);
+      expect(window.localStorage.removeItem).not.toHaveBeenCalled();
+    });
+  });
 });

@@ -131,4 +131,74 @@ describe('Formik Persist', () => {
 
     expect(window.localStorage.setItem).toHaveBeenCalledWith('signup', 'dump');
   });
+
+  it('clears data when submitted', () => {
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    const { unmount } = render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+
+          return (
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+              clearData={localStorage.removeItem}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    act(() => {
+      injectedFormik.setSubmitting(true);
+    });
+
+    unmount();
+
+    expect(window.localStorage.removeItem).toHaveBeenCalled();
+  });
+
+  it('does not clear data when not submitted', () => {
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    const { unmount } = render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+
+          return (
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+              clearData={localStorage.removeItem}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    act(() => {
+      injectedFormik.setSubmitting(false);
+    });
+
+    unmount();
+
+    expect(window.localStorage.removeItem).not.toHaveBeenCalled();
+  });
 });

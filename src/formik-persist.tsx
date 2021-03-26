@@ -6,29 +6,38 @@ export interface PersistProps<T> {
   name: string;
 
   debounceWaitMs?: number;
+  clearOnOnmount?: boolean;
 
   parse?: (rawString: string) => T;
   dump?: (data: T) => string;
 
   setData?: (name: string, stringData: string) => void;
   getData?: (name: string) => string | undefined | null;
+  clearData?: (name: string) => void;
 }
 
 const DEFAULT_PROPS = {
   debounceWaitMs: 300,
+  clearOnOnmount: true,
   parse: JSON.parse,
   dump: JSON.stringify,
   setData: window.localStorage && window.localStorage.setItem,
   getData: window.localStorage && window.localStorage.getItem,
+  clearData: window.localStorage && window.localStorage.removeItem,
 };
 
 const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
-  const { parse, getData, setData, name, dump } = Object.assign(
-    DEFAULT_PROPS,
-    props
-  );
+  const {
+    parse,
+    getData,
+    setData,
+    name,
+    dump,
+    clearData,
+    clearOnOnmount,
+  } = Object.assign(DEFAULT_PROPS, props);
 
-  const { setValues, values } = useFormikContext<T>();
+  const { setValues, values, isSubmitting } = useFormikContext<T>();
 
   // Debounce doesn't work with tests
   const saveForm = useCallback(
@@ -62,6 +71,16 @@ const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
       saveForm(values);
     },
     [values, saveForm]
+  );
+
+  // Clear data after unmount
+  useEffect(
+    () => () => {
+      if (clearOnOnmount && isSubmitting) {
+        clearData(name);
+      }
+    },
+    [clearOnOnmount, isSubmitting, clearData, name]
   );
 
   return null;

@@ -1,7 +1,7 @@
 {
   "name": "formik-remember",
   "description": "Automatically saves and loads Formik form",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "author": "Myzel394 Xyllian <myzel394.xyllian@gmail.com>",
   "repository": "Myzel394/formik-remember",
@@ -16,9 +16,9 @@
     "sesionstorage",
     "hoc"
   ],
-  "main": "dist/formik-remember.js",
-  "module": "dist/formik-remember.es6.js",
-  "typings": "dist/formik-remember.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es6.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],

@@ -6,7 +6,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps';
 import uglify from 'rollup-plugin-uglify';
 
 const shared = {
-  entry: `compiled/formik-remember.js`,
+  entry: `compiled/index.js`,
   sourceMap: true,
   external: ['react', 'formik', 'prop-types', 'lodash.isequal'],
   globals: {
@@ -22,7 +22,7 @@ export default [
   Object.assign({}, shared, {
     moduleName: 'FormikRemember',
     format: 'umd',
-    dest: 'dist/formik-remember.umd.js',
+    dest: 'dist/index.umd.js',
     plugins: [
       resolve(),
       commonjs({
@@ -36,8 +36,8 @@ export default [
 
   Object.assign({}, shared, {
     targets: [
-      { dest: 'dist/formik-remember.es6.js', format: 'es' },
-      { dest: 'dist/formik-remember.js', format: 'cjs' },
+      { dest: 'dist/index.es6.js', format: 'es' },
+      { dest: 'dist/index.js', format: 'cjs' },
     ],
     plugins: [
       resolve(),

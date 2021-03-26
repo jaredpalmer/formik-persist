@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react';
 import * as React from 'react';
 import { Formik, FormikProps } from 'formik';
-import Persist from '../src/formik-persist';
+import Remember from '../src/formik-remember';
 
 // tslint:disable-next-line:no-empty
 const noop = () => {};
@@ -18,7 +18,7 @@ describe('Formik Persist', () => {
       <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
         {() => {
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -44,7 +44,7 @@ describe('Formik Persist', () => {
         {formik => {
           injectedFormik = formik;
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -79,7 +79,7 @@ describe('Formik Persist', () => {
         {formik => {
           injectedFormik = formik;
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -111,7 +111,7 @@ describe('Formik Persist', () => {
           injectedFormik = formik;
 
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -146,7 +146,7 @@ describe('Formik Persist', () => {
           injectedFormik = formik;
 
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -181,7 +181,7 @@ describe('Formik Persist', () => {
           injectedFormik = formik;
 
           return (
-            <Persist
+            <Remember
               name="signup"
               debounceWaitMs={0}
               getData={localStorage.getItem}
@@ -216,7 +216,7 @@ describe('Formik Persist', () => {
           injectedFormik = formik;
 
           return (
-            <Persist
+            <Remember
               clearOnOnmount={false}
               saveOnlyOnSubmit={true}
               name="signup"
@@ -252,7 +252,7 @@ describe('Formik Persist', () => {
           injectedFormik = formik;
 
           return (
-            <Persist
+            <Remember
               clearOnOnmount={false}
               saveOnlyOnSubmit={true}
               name="signup"

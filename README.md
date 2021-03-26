@@ -1,9 +1,16 @@
-# Formik Persist
+# Formik Remember
 
-Persist and rehydrate a [Formik](https://github.com/jaredpalmer/formik) form.
+Automatically saves and loads [Formik](https://github.com/jaredpalmer/formik) forms by
+using `localStorage`, `sessionStorage`, or your own storage system!
 
+```bash
+yarn add formik-remember
 ```
-npm install formik-persist --save
+
+or
+
+```bash
+npm install formik-remember --save
 ```
 
 # Basic Usage
@@ -13,7 +20,7 @@ Just import the `<Persist >` component and put it inside any Formik form. It ren
 ```tsx
 import React from 'react'
 import { Formik, Field, Form } from 'formik'
-import Persist from 'formik-persist'
+import Remember from 'formik-remember'
 
 interface IFormikForm {
   firstName: string;
@@ -33,7 +40,7 @@ export const Signup = () => {
           <Field name="lastName" placeholder="Last Name" />
           <Field name="email" type="email" placeholder="Email Address" />
           <button type="submit">Submit</button>
-          <Persist<IFormikForm> name="signup-form" />
+          <Remember<IFormikForm> name="signup-form" />
         </Form>
       )}
     </Formik>
@@ -86,12 +93,3 @@ default: `localStorage.setItem`
 The method which clears your data.
 
 default: `localStorage.removeItem`
-
-## Author
-
-- Jared Palmer [@jaredpalmer](https://twitter.com/jaredpalmer)
-
-
-## Todo
-
-- Support AsyncStorage for React Native

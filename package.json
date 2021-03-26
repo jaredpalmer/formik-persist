@@ -1,10 +1,10 @@
 {
-  "name": "formik-persist",
-  "description": "Persist and rehydrate a Formik form",
-  "version": "2.0.0",
+  "name": "formik-remember",
+  "description": "Automatically saves and loads Formik form",
+  "version": "1.0.0",
   "license": "MIT",
-  "author": "Jared Palmer <jared@palmer.net>",
-  "repository": "jaredpalmer/formik-persist",
+  "author": "Myzel394 Xyllian <myzel394.xyllian@gmail.com>",
+  "repository": "Myzel394/formik-remember",
   "keywords": [
     "formik",
     "react",
@@ -13,23 +13,21 @@
     "validation",
     "forms",
     "localstorage",
+    "sesionstorage",
     "hoc"
   ],
-  "main": "dist/formik-persist.js",
-  "module": "dist/formik-persist.es6.js",
-  "typings": "dist/formik-persist.d.ts",
+  "main": "dist/formik-remember.js",
+  "module": "dist/formik-remember.es6.js",
+  "typings": "dist/formik-remember.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "test": "jest --env=jsdom",
-    "test:watch": "npm run test -- --watch",
     "start": "cross-env NODE_ENV=development tsc-watch --onSuccess \"rollup -c\"",
     "prebuild": "rimraf dist",
     "build": "tsc && cross-env NODE_ENV=production rollup -c && rimraf compiled",
     "prepublish": "npm run build",
-    "format": "prettier --trailing-comma es5 --single-quote --write 'src/**/*' 'test/**/*'",
-    "precommit": "lint-staged",
     "addc": "all-contributors add",
     "gen-docs": "all-contributors generate && doctoc README.md"
   },

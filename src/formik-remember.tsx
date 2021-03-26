@@ -28,7 +28,7 @@ const DEFAULT_PROPS = {
   clearData: window.localStorage && window.localStorage.removeItem,
 };
 
-const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
+const FormikRemember = <T extends any = any>(props: PersistProps<T>) => {
   const {
     parse,
     getData,
@@ -101,4 +101,4 @@ const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
   return null;
 };
 
-export default FormikPersist;
+export default FormikRemember;

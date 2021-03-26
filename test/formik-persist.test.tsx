@@ -1,67 +1,134 @@
+import { act, render } from '@testing-library/react';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Persist } from '../src/formik-persist';
-import { Formik, FormikProps, Form } from 'formik';
+import { Formik, FormikProps } from 'formik';
+import Persist from '../src/formik-persist';
 
 // tslint:disable-next-line:no-empty
 const noop = () => {};
 
 describe('Formik Persist', () => {
-  it('attempts to rehydrate on mount', () => {
-    let node = document.createElement('div');
+  it('loads data on mount', () => {
     (window as any).localStorage = {
       getItem: jest.fn(),
       setItem: jest.fn(),
       removeItem: jest.fn(),
     };
-    let injected: any;
 
-    ReactDOM.render(
-      <Formik
-        initialValues={{ name: 'jared' }}
-        onSubmit={noop}
-        render={(props: FormikProps<{ name: string }>) => {
-          injected = props;
+    render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {() => {
           return (
-            <div>
-              <Persist name="signup" debounce={0} />
-            </div>
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+            />
           );
         }}
-      />,
-      node
+      </Formik>
     );
     expect(window.localStorage.getItem).toHaveBeenCalled();
-    injected.setValues({ name: 'ian' });
-    expect(injected.values.name).toEqual('ian');
   });
 
-  it('attempts to rehydrate on mount if session storage is true on props', () => {
-    let node = document.createElement('div');
-    (window as any).sessionStorage = {
+  it('sets data on update', () => {
+    (window as any).localStorage = {
       getItem: jest.fn(),
       setItem: jest.fn(),
       removeItem: jest.fn(),
     };
-    let injected: any;
+    let injectedFormik: FormikProps<any>;
 
-    ReactDOM.render(
-      <Formik
-        initialValues={{ name: 'Anuj Sachan' }}
-        onSubmit={noop}
-        render={(props: FormikProps<{ name: string }>) => {
-          injected = props;
+    render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
           return (
-            <div>
-              <Persist name="signup" debounce={0} isSessionStorage />
-            </div>
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+            />
           );
         }}
-      />,
-      node
+      </Formik>
     );
-    expect(window.sessionStorage.getItem).toHaveBeenCalled();
-    injected.setValues({ name: 'Anuj' });
-    expect(injected.values.name).toEqual('Anuj');
+
+    act(() => {
+      injectedFormik.setValues({
+        name: 'test',
+      });
+    });
+
+    expect(localStorage.setItem).toHaveBeenCalled();
+  });
+
+  it('custom parse method works', () => {
+    (window as any).localStorage = {
+      getItem: () => ({
+        name: 'storage',
+      }),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+          return (
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+              parse={() => ({
+                name: 'parse',
+              })}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    // @ts-ignore
+    expect(injectedFormik.values.name).toBe('parse');
+  });
+
+  it('custom dump method works', () => {
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+
+          return (
+            <Persist
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+              dump={() => 'dump'}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    act(() => {
+      injectedFormik.setValues({
+        name: 'foo',
+      });
+    });
+
+    expect(window.localStorage.setItem).toHaveBeenCalledWith('signup', 'dump');
   });
 });

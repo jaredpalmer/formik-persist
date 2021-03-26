@@ -27,9 +27,9 @@ const DEFAULT_PROPS = {
 
 const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
   const {
-    getData = window.localStorage.getItem,
-    setData = window.localStorage.setItem,
-    clearData = window.localStorage.removeItem,
+    getData = window.localStorage.getItem.bind(window.localStorage),
+    setData = window.localStorage.setItem.bind(window.localStorage),
+    clearData = window.localStorage.removeItem.bind(window.localStorage),
     name,
     parse,
     dump,

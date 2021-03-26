@@ -2,7 +2,7 @@ name: React CI:CD Workflow
 
 on:
   - push
-  - pull_request]
+  - pull_request
 
 
 jobs:

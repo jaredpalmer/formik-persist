@@ -23,12 +23,12 @@ interface IFormikForm {
 
 export const Signup = () => {
   return (
-    <Formik
+    <Formik<IFormikForm>
       onSubmit={values => console.log(values)}
       initialValues={{ firstName: '', lastName: '', email: '' }}
     >
       {() => (
-        <Form<IFormikForm>>
+        <Form>
           <Field name="firstName" placeholder="First Name" />
           <Field name="lastName" placeholder="Last Name" />
           <Field name="email" type="email" placeholder="Email Address" />

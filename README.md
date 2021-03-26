@@ -15,7 +15,7 @@ npm install formik-remember --save
 
 # Basic Usage
 
-Just import the `<Persist >` component and put it inside any Formik form. It renders `null`!
+Just import the `<Remember >` component and put it inside any Formik form. It renders `null`!
 
 ```tsx
 import React from 'react'

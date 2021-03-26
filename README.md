@@ -10,27 +10,35 @@ npm install formik-persist --save
 
 Just import the `<Persist >` component and put it inside any Formik form. It renders `null`!
 
-```js
+```tsx
 import React from 'react'
 import { Formik, Field, Form } from 'formik'
 import Persist from 'formik-persist'
 
-export const Signup = () =>
-  <div>
-    <h1>My Cool Persisted Form</h1>
+interface IFormikForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export const Signup = () => {
+  return (
     <Formik
       onSubmit={values => console.log(values)}
       initialValues={{ firstName: '', lastName: '', email: '' }}
-      render={props =>
-        <Form className="whatever">
+    >
+      {() => (
+        <Form<IFormikForm>>
           <Field name="firstName" placeholder="First Name" />
           <Field name="lastName" placeholder="Last Name" />
           <Field name="email" type="email" placeholder="Email Address" />
           <button type="submit">Submit</button>
-          <Persist name="signup-form" />
-        </Form>}
-    />
-  </div>;
+          <Persist<IFormikForm> name="signup-form" />
+        </Form>
+      )}
+    </Formik>
+  );
+}
 ```
 
 ### Props

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useLayoutEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useFormikContext } from 'formik';
 import isEqual from 'react-fast-compare';
-import usePrevious from './usePrevious';
+import useComponentWillMount from './useComponentWillMount';
 
 export interface FormikRememberProps<T> {
   name: string;
@@ -40,7 +40,7 @@ const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
 
   const { setValues, values, isSubmitting } = useFormikContext<T>();
 
-  const previousValue = usePrevious(values, undefined);
+  const $savedValues = useRef<T>();
 
   // Debounce doesn't work with tests
   const saveForm = useCallback(
@@ -53,25 +53,22 @@ const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
   );
 
   // Load state from storage
-  useLayoutEffect(
-    () => {
-      const stringData = getData(name);
+  useComponentWillMount(() => {
+    const stringData = getData(name);
 
-      if (stringData) {
-        const savedValues = parse(stringData);
+    if (stringData) {
+      const savedValues = parse(stringData);
 
-        if (!isEqual(savedValues, values)) {
-          setValues(savedValues);
-        }
+      if (!isEqual(savedValues, values)) {
+        $savedValues.current = savedValues;
+        setValues(savedValues);
       }
-    },
-    [getData, name, parse, setValues]
-  );
-
+    }
+  })
   // Save state
   useEffect(
     () => {
-      if (!saveOnlyOnSubmit && !isEqual(values, previousValue)) {
+      if (!saveOnlyOnSubmit && !isEqual(values, $savedValues.current)) {
         saveForm(values);
       }
     },

@@ -1,3 +1,3 @@
-import Remember from './formik-remember';
+import FormikRemember from './FormikRemember';
 
-export default Remember;
+export default FormikRemember;

@@ -1,7 +1,7 @@
 {
   "name": "formik-remember",
   "description": "Automatically saves and loads Formik form",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "Myzel394 Xyllian <myzel394.xyllian@gmail.com>",
   "repository": "Myzel394/formik-remember",

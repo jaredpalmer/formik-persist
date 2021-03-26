@@ -13,7 +13,7 @@ Just import the `<Persist >` component and put it inside any Formik form. It ren
 ```js
 import React from 'react'
 import { Formik, Field, Form } from 'formik'
-import { Persist } from 'formik-persist'
+import Persist from 'formik-persist'
 
 export const Signup = () =>
   <div>
@@ -35,12 +35,34 @@ export const Signup = () =>
 
 ### Props
 
-Only three props! 
+#### `name: string`
+Localstorage key to save form state to
 
-- `name: string`: LocalStorage key to save form state to
-- `debounce:? number`: Default is `300`. Number of ms to debounce the function that saves form state.
-- `isSessionStorage:? boolean`: default is `false` . Send if you want Session storage inplace of Local storage
+#### `parse: (rawString: string) => T`
+Custom parse method for your data (T is your data type).
 
+default: `JSON.parse`
+
+#### `dump: (data: T) => string`
+Custom dump method for your data (T is your data type).
+
+default: `JSON.stringify`
+
+#### `setData: (name: string, stringData: string) => void`
+The method which sets your data.
+This method should NOT dump it, that's what `dump` is for.
+
+This function should ONLY set the raw output of `parse`.
+
+default: `localStorage.setItem`
+
+#### `getData: (name: string) => string | undefined | null`
+The method which returns your data. 
+This method should NOT parse it, that's what `parse` is for.
+
+This function should ONLY return your data in a raw string format.
+
+default: `localStorage.setItem`
 
 ## Author
 
@@ -49,5 +71,4 @@ Only three props!
 
 ## Todo
 
-- Alternative storages (localForage)
 - Support AsyncStorage for React Native

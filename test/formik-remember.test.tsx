@@ -21,8 +21,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
             />
           );
         }}
@@ -47,8 +45,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
             />
           );
         }}
@@ -82,8 +78,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
               parse={() => ({
                 name: 'parse',
               })}
@@ -114,8 +108,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
               dump={() => 'dump'}
             />
           );
@@ -149,9 +141,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
-              clearData={localStorage.removeItem}
             />
           );
         }}
@@ -184,9 +173,6 @@ describe('Formik Persist', () => {
             <Remember
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
-              clearData={localStorage.removeItem}
             />
           );
         }}
@@ -221,8 +207,6 @@ describe('Formik Persist', () => {
               saveOnlyOnSubmit={true}
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
             />
           );
         }}
@@ -257,8 +241,6 @@ describe('Formik Persist', () => {
               saveOnlyOnSubmit={true}
               name="signup"
               debounceWaitMs={0}
-              getData={localStorage.getItem}
-              setData={localStorage.setItem}
             />
           );
         }}

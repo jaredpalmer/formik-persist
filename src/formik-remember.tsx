@@ -23,19 +23,16 @@ const DEFAULT_PROPS = {
   saveOnlyOnSubmit: false,
   parse: JSON.parse,
   dump: JSON.stringify,
-  setData: window.localStorage && window.localStorage.setItem,
-  getData: window.localStorage && window.localStorage.getItem,
-  clearData: window.localStorage && window.localStorage.removeItem,
 };
 
 const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
   const {
-    parse,
-    getData,
-    setData,
+    getData = window.localStorage.getItem,
+    setData = window.localStorage.setItem,
+    clearData = window.localStorage.removeItem,
     name,
+    parse,
     dump,
-    clearData,
     clearOnOnmount,
     saveOnlyOnSubmit,
   } = Object.assign(DEFAULT_PROPS, props);

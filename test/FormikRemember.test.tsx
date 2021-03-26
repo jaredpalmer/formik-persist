@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react';
 import * as React from 'react';
 import { Formik, FormikProps } from 'formik';
-import Remember from '../src/formik-remember';
+import Remember from '../src/FormikRemember';
 
 // tslint:disable-next-line:no-empty
 const noop = () => {};

@@ -93,3 +93,11 @@ default: `localStorage.setItem`
 The method which clears your data.
 
 default: `localStorage.removeItem`
+
+## There's already the official formik-persist available
+
+Yes that's true, but that package seems to be unmaintained.
+No pull requests are accepted anymore and issues haven't been resolved for over
+a year.
+
+This package welcomes pull requests and merges them :) 

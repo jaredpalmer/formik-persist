@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect } from 'react';
 import { useFormikContext } from 'formik';
 import isEqual from 'react-fast-compare';
+import usePrevious from './usePrevious';
 
 export interface FormikRememberProps<T> {
   name: string;
@@ -39,6 +40,8 @@ const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
 
   const { setValues, values, isSubmitting } = useFormikContext<T>();
 
+  const previousValue = usePrevious(values, undefined);
+
   // Debounce doesn't work with tests
   const saveForm = useCallback(
     (data: T) => {
@@ -68,7 +71,7 @@ const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
   // Save state
   useEffect(
     () => {
-      if (!saveOnlyOnSubmit) {
+      if (!saveOnlyOnSubmit && !isEqual(values, previousValue)) {
         saveForm(values);
       }
     },

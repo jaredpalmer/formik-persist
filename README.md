@@ -36,12 +36,22 @@ export const Signup = () =>
 ### Props
 
 #### `name: string`
-Localstorage key to save form state to
+Key to save form state to
 
 #### `parse: (rawString: string) => T`
 Custom parse method for your data (T is your data type).
 
 default: `JSON.parse`
+
+#### `clearOnOnmount: boolean`
+Whether the data should be cleared after the form is submitted.
+
+default: `true`
+
+#### `saveOnlyOnSubmit: boolean`
+Whether the data should ONLY be saved after the form is submitted.
+
+default: `false`
 
 #### `dump: (data: T) => string`
 Custom dump method for your data (T is your data type).
@@ -57,12 +67,17 @@ This function should ONLY set the raw output of `parse`.
 default: `localStorage.setItem`
 
 #### `getData: (name: string) => string | undefined | null`
-The method which returns your data. 
+The method which returns your data.
 This method should NOT parse it, that's what `parse` is for.
 
 This function should ONLY return your data in a raw string format.
 
 default: `localStorage.setItem`
+
+#### `clearData: (name: string) => void`
+The method which clears your data.
+
+default: `localStorage.removeItem`
 
 ## Author
 

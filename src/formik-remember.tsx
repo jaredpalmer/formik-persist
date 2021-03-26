@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect } from 'react';
 import { useFormikContext } from 'formik';
 import isEqual from 'react-fast-compare';
 
-export interface PersistProps<T> {
+export interface FormikRememberProps<T> {
   name: string;
 
   debounceWaitMs?: number;
@@ -28,7 +28,7 @@ const DEFAULT_PROPS = {
   clearData: window.localStorage && window.localStorage.removeItem,
 };
 
-const FormikRemember = <T extends any = any>(props: PersistProps<T>) => {
+const FormikRemember = <T extends any = any>(props: FormikRememberProps<T>) => {
   const {
     parse,
     getData,

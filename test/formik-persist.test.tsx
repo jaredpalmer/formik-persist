@@ -201,4 +201,76 @@ describe('Formik Persist', () => {
 
     expect(window.localStorage.removeItem).not.toHaveBeenCalled();
   });
+
+  it('saves on submit when saveOnlyOnSubmit is present', () => {
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    const { unmount } = render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+
+          return (
+            <Persist
+              clearOnOnmount={false}
+              saveOnlyOnSubmit={true}
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    act(() => {
+      injectedFormik.setSubmitting(true);
+    });
+
+    unmount();
+
+    expect(window.localStorage.setItem).toHaveBeenCalled();
+  });
+
+  it('does not save on change when saveOnlyOnSubmit is present', () => {
+    (window as any).localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    let injectedFormik: FormikProps<any>;
+
+    render(
+      <Formik initialValues={{ name: 'jared' }} onSubmit={noop}>
+        {formik => {
+          injectedFormik = formik;
+
+          return (
+            <Persist
+              clearOnOnmount={false}
+              saveOnlyOnSubmit={true}
+              name="signup"
+              debounceWaitMs={0}
+              getData={localStorage.getItem}
+              setData={localStorage.setItem}
+            />
+          );
+        }}
+      </Formik>
+    );
+
+    act(() => {
+      injectedFormik.setValues({
+        name: 'foo',
+      });
+    });
+
+    expect(window.localStorage.setItem).not.toHaveBeenCalled();
+  });
 });

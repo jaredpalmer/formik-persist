@@ -7,6 +7,7 @@ export interface PersistProps<T> {
 
   debounceWaitMs?: number;
   clearOnOnmount?: boolean;
+  saveOnlyOnSubmit?: boolean;
 
   parse?: (rawString: string) => T;
   dump?: (data: T) => string;
@@ -19,6 +20,7 @@ export interface PersistProps<T> {
 const DEFAULT_PROPS = {
   debounceWaitMs: 300,
   clearOnOnmount: true,
+  saveOnlyOnSubmit: false,
   parse: JSON.parse,
   dump: JSON.stringify,
   setData: window.localStorage && window.localStorage.setItem,
@@ -35,6 +37,7 @@ const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
     dump,
     clearData,
     clearOnOnmount,
+    saveOnlyOnSubmit,
   } = Object.assign(DEFAULT_PROPS, props);
 
   const { setValues, values, isSubmitting } = useFormikContext<T>();
@@ -68,9 +71,11 @@ const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
   // Save state
   useEffect(
     () => {
-      saveForm(values);
+      if (!saveOnlyOnSubmit) {
+        saveForm(values);
+      }
     },
-    [values, saveForm]
+    [values, saveForm, saveOnlyOnSubmit]
   );
 
   // Clear data after unmount
@@ -81,6 +86,16 @@ const FormikPersist = <T extends any = any>(props: PersistProps<T>) => {
       }
     },
     [clearOnOnmount, isSubmitting, clearData, name]
+  );
+
+  // saveOnlyOnSubmit
+  useEffect(
+    () => () => {
+      if (saveOnlyOnSubmit && isSubmitting) {
+        saveForm(values);
+      }
+    },
+    [saveOnlyOnSubmit, isSubmitting, saveForm, values]
   );
 
   return null;

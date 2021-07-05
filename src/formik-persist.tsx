@@ -7,6 +7,7 @@ export interface PersistProps {
   name: string;
   debounce?: number;
   isSessionStorage?: boolean;
+  confirm?: () => Promise<boolean>;
 }
 
 class PersistImpl extends React.Component<
@@ -31,13 +32,25 @@ class PersistImpl extends React.Component<
     }
   }
 
-  componentDidMount() {
+  rehydrate = async () => {
     const maybeState = this.props.isSessionStorage
       ? window.sessionStorage.getItem(this.props.name)
       : window.localStorage.getItem(this.props.name);
+
     if (maybeState && maybeState !== null) {
-      this.props.formik.setFormikState(JSON.parse(maybeState));
+      if (this.props.confirm) {
+        const promptResult = await this.props.confirm();
+        if (promptResult) {
+          this.props.formik.setFormikState(JSON.parse(maybeState));
+        }
+      } else {
+        this.props.formik.setFormikState(JSON.parse(maybeState));
+      }
     }
+  };
+
+  componentDidMount() {
+    this.rehydrate();
   }
 
   render() {

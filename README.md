@@ -40,6 +40,7 @@ Only three props!
 - `name: string`: LocalStorage key to save form state to
 - `debounce:? number`: Default is `300`. Number of ms to debounce the function that saves form state.
 - `isSessionStorage:? boolean`: default is `false` . Send if you want Session storage inplace of Local storage
+- `confirm:? () => Promise<boolean>`: Default rehydrate onmount. Send if you want rehydrate depend on certain situations 
 
 
 ## Author

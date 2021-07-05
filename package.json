@@ -1,7 +1,7 @@
 {
   "name": "formik-persist",
   "description": "Persist and rehydrate a Formik form",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "MIT",
   "author": "Jared Palmer <jared@palmer.net>",
   "repository": "jaredpalmer/formik-persist",

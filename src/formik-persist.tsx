@@ -7,6 +7,7 @@ export interface PersistProps {
   name: string;
   debounce?: number;
   isSessionStorage?: boolean;
+  normalize?: (values: any) => any;
 }
 
 class PersistImpl extends React.Component<
@@ -15,6 +16,7 @@ class PersistImpl extends React.Component<
 > {
   static defaultProps = {
     debounce: 300,
+    normalize: (values: any) => values,
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
@@ -36,7 +38,9 @@ class PersistImpl extends React.Component<
       ? window.sessionStorage.getItem(this.props.name)
       : window.localStorage.getItem(this.props.name);
     if (maybeState && maybeState !== null) {
-      this.props.formik.setFormikState(JSON.parse(maybeState));
+      const parsed = JSON.parse(maybeState);
+      const data = this.props.normalize ? this.props.normalize(parsed) : parsed;
+      this.props.formik.setFormikState(data);
     }
   }
 
